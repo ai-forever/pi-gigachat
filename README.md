@@ -5,7 +5,7 @@ GigaChat as a standalone `pi-coding-agent` extension package.
 ## What It Includes
 
 - native `gigachat` provider registration for `pi`
-- built-in `GigaChat-2`, `GigaChat-2-Pro`, and `GigaChat-2-Max`
+- built-in `GigaChat-2` (Lite), `GigaChat-2-Pro`, and `GigaChat-2-Max`
 - `/login gigachat` onboarding with stored credential refresh
 - robust streaming for tool-heavy sessions without the SDK `client.stream(...)` parser path
 
@@ -91,6 +91,14 @@ export GIGACHAT_BASE_URL=https://gigachat.devices.sberbank.ru/api/v1
 - `gigachat/GigaChat-2`
 - `gigachat/GigaChat-2-Pro`
 - `gigachat/GigaChat-2-Max`
+
+Current metadata is aligned with the public GigaChat model docs as of March 23, 2026:
+
+- `GigaChat-2` is shown as `GigaChat 2 Lite`
+- `GigaChat-2-Pro` and `GigaChat-2-Max` are marked as text-and-image capable in `pi`
+- public per-million-token pricing is reflected in the extension metadata
+
+`pi` model metadata only supports `text` and `image` input flags today, so GigaChat audio-input support is not represented separately even though the upstream Pro and Max models support it.
 
 ## Notes
 
