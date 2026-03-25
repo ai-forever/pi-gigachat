@@ -1,11 +1,11 @@
 {
-	"name": "@nyddle/pi-gigachat",
+	"name": "@ai-forever/pi-gigachat",
 	"version": "0.1.0",
 	"description": "GigaChat provider extension for pi-coding-agent",
 	"private": false,
 	"type": "module",
 	"license": "MIT",
-	"author": "nyddle",
+	"author": "ai-forever",
 	"keywords": [
 		"pi-package",
 		"gigachat",
@@ -14,11 +14,11 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/nyddle/pi-gigachat.git"
+		"url": "git+https://github.com/ai-forever/pi-gigachat.git"
 	},
-	"homepage": "https://github.com/nyddle/pi-gigachat#readme",
+	"homepage": "https://github.com/ai-forever/pi-gigachat#readme",
 	"bugs": {
-		"url": "https://github.com/nyddle/pi-gigachat/issues"
+		"url": "https://github.com/ai-forever/pi-gigachat/issues"
 	},
 	"engines": {
 		"node": ">=20.0.0"

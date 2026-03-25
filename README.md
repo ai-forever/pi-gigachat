@@ -1,4 +1,4 @@
-# `@nyddle/pi-gigachat`
+# `@ai-forever/pi-gigachat`
 
 GigaChat as a standalone `pi-coding-agent` extension package.
 
@@ -12,13 +12,13 @@ GigaChat as a standalone `pi-coding-agent` extension package.
 ## Install
 
 ```bash
-pi install npm:@nyddle/pi-gigachat
+pi install npm:@ai-forever/pi-gigachat
 ```
 
 Try it without installing:
 
 ```bash
-pi -e npm:@nyddle/pi-gigachat
+pi -e npm:@ai-forever/pi-gigachat
 ```
 
 Or load the local checkout directly:
@@ -110,7 +110,7 @@ Current metadata is aligned with the public GigaChat model docs as of March 23, 
 
 Before the first publish:
 
-1. Create the GitHub repo at `github.com/nyddle/pi-gigachat` or update the repository URLs in [`package.json`](/tmp/pi-gigachat/package.json).
+1. Create the GitHub repo at `github.com/ai-forever/pi-gigachat` or update the repository URLs in [`package.json`](/Users/ayudavidov/pi-gigachat/package.json).
 2. Run `npm install`.
 3. Run `npm run check`.
 4. Publish with `npm publish --access public`.
