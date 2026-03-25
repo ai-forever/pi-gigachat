@@ -23,26 +23,34 @@
 	"engines": {
 		"node": ">=20.0.0"
 	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
-		".": "./index.ts"
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
 	},
 	"files": [
-		"*.ts",
+		"dist",
 		"README.md",
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "echo 'nothing to build'",
-		"clean": "echo 'nothing to clean'",
-		"check": "biome check --write --error-on-warnings . && tsc --noEmit",
-		"prepublishOnly": "npm run check"
+		"build": "rm -rf dist && tsc -p tsconfig.build.json",
+		"clean": "rm -rf dist",
+		"check": "biome check --write --error-on-warnings src package.json README.md && tsc --noEmit",
+		"prepare": "npm run build",
+		"prepublishOnly": "npm run build && npm run check"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"pi": {
 		"extensions": [
-			"./index.ts"
+			"./dist/index.js"
 		]
 	},
 	"peerDependencies": {

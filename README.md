@@ -8,6 +8,7 @@ GigaChat as a standalone `pi-coding-agent` extension package.
 - built-in `GigaChat-2` (Lite), `GigaChat-2-Pro`, and `GigaChat-2-Max`
 - `/login gigachat` onboarding with stored credential refresh
 - robust streaming for tool-heavy sessions without the SDK `client.stream(...)` parser path
+- source in `src/` and published build artifacts in `dist/`
 
 ## Install
 
@@ -21,9 +22,10 @@ Try it without installing:
 pi -e npm:@ai-forever/pi-gigachat
 ```
 
-Or load the local checkout directly:
+Or load the local checkout directly after building once:
 
 ```bash
+npm install
 pi -e /absolute/path/to/pi-gigachat
 ```
 
@@ -113,11 +115,13 @@ Before the first publish:
 1. Create the GitHub repo at `github.com/ai-forever/pi-gigachat` or update the repository URLs in [`package.json`](/Users/ayudavidov/pi-gigachat/package.json).
 2. Run `npm install`.
 3. Run `npm run check`.
-4. Publish with `npm publish --access public`.
+4. Confirm `npm publish --dry-run`.
+5. Publish with `npm publish --access public`.
 
 ## Development
 
 ```bash
 npm install
+npm run build
 npm run check
 ```

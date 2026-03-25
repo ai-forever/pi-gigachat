@@ -9,7 +9,8 @@
 		"skipLibCheck": true,
 		"verbatimModuleSyntax": true,
 		"noEmit": true,
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true,
+		"rootDir": "./src"
 	},
-	"include": ["./*.ts"]
+	"include": ["src/**/*.ts"]
 }
