@@ -299,7 +299,7 @@ export class PiGigaChatClient extends GigaChat {
 			data?: unknown;
 		};
 
-		ensureSuccessfulStreamResponse(response);
+		ensureSuccessfulStreamResponse(response, payload.model);
 
 		if (!response.data) {
 			throw new Error("GigaChat returned an empty streaming response body");
@@ -341,10 +341,13 @@ export function isAccessToken(value: string): boolean {
 	return value.split(".").length >= 3;
 }
 
-function ensureSuccessfulStreamResponse(response: {
-	status?: number;
-	headers?: Record<string, string | string[] | undefined>;
-}): void {
+function ensureSuccessfulStreamResponse(
+	response: {
+		status?: number;
+		headers?: Record<string, string | string[] | undefined>;
+	},
+	modelId?: string,
+): void {
 	if (response.status === 200) {
 		const contentType = getHeaderValue(response.headers, "content-type")?.split(
 			";",
@@ -360,6 +363,10 @@ function ensureSuccessfulStreamResponse(response: {
 
 	if (response.status === 401) {
 		throw createGigaChatAuthenticationError(response);
+	}
+
+	if (response.status === 402) {
+		throw createGigaChatQuotaError(response, modelId);
 	}
 
 	throw createGigaChatResponseError(
@@ -407,6 +414,25 @@ function createGigaChatResponseError(
 	};
 	error.response = response;
 	return error;
+}
+
+function createGigaChatQuotaError(
+	response: {
+		status?: number;
+		headers?: Record<string, string | string[] | undefined>;
+	},
+	modelId?: string,
+): Error & {
+	response: {
+		status?: number;
+		headers?: Record<string, string | string[] | undefined>;
+	};
+} {
+	const modelLabel = modelId ? ` for model ${modelId}` : "";
+	return createGigaChatResponseError(
+		response,
+		`GigaChat quota exhausted${modelLabel}. Check your GigaChat balance or switch to another model.`,
+	);
 }
 
 function isAuthenticationError(error: unknown): boolean {
