@@ -1,4 +1,4 @@
-# `@ai-forever/pi-gigachat`
+# `@gigachain/pi-gigachat`
 
 GigaChat as a standalone `pi-coding-agent` extension package.
 
@@ -13,13 +13,13 @@ GigaChat as a standalone `pi-coding-agent` extension package.
 ## Install
 
 ```bash
-pi install npm:@ai-forever/pi-gigachat
+pi install npm:@gigachain/pi-gigachat
 ```
 
 Try it without installing:
 
 ```bash
-pi -e npm:@ai-forever/pi-gigachat
+pi -e npm:@gigachain/pi-gigachat
 ```
 
 Or load the local checkout directly after building once:

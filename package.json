@@ -1,5 +1,5 @@
 {
-	"name": "@ai-forever/pi-gigachat",
+	"name": "@gigachain/pi-gigachat",
 	"version": "0.1.0",
 	"description": "GigaChat provider extension for pi-coding-agent",
 	"private": false,
