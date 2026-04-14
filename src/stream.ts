@@ -230,9 +230,12 @@ function buildChatPayload(
 		payload.repetition_penalty = options.repetitionPenalty;
 	if (options?.updateInterval !== undefined)
 		payload.update_interval = options.updateInterval;
-	if (context.tools?.length)
+	if (context.tools?.length) {
 		payload.functions = convertFunctions(context.tools);
-	if (options?.functionCall) payload.function_call = options.functionCall;
+		payload.function_call = options?.functionCall ?? "auto";
+	} else if (options?.functionCall) {
+		payload.function_call = options.functionCall;
+	}
 
 	return payload;
 }
