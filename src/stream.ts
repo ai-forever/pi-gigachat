@@ -133,7 +133,7 @@ function createOutput(model: Model<Api>): AssistantMessage {
 }
 
 function resolveAuth(options?: GigaChatStreamOptions): GigaChatAuth {
-	const optionApiKey = options?.apiKey;
+	const optionApiKey = resolveOptionApiKey(options?.apiKey);
 	if (optionApiKey) {
 		if (isAccessToken(optionApiKey)) {
 			return { kind: "accessToken", accessToken: optionApiKey };
@@ -175,6 +175,16 @@ function resolveAuth(options?: GigaChatStreamOptions): GigaChatAuth {
 	throw new Error(
 		"No GigaChat authentication configured. Run /login gigachat or set GIGACHAT_CREDENTIALS, GIGACHAT_ACCESS_TOKEN, or GIGACHAT_USER/GIGACHAT_PASSWORD.",
 	);
+}
+
+function resolveOptionApiKey(value: string | undefined): string | undefined {
+	// pi-ai passes the provider's apiKey setting through as a literal env var
+	// name when the variable is unset. Do not treat that placeholder as a real
+	// credential, otherwise GIGACHAT_USER/GIGACHAT_PASSWORD fallback is skipped.
+	if (value === "GIGACHAT_CREDENTIALS") {
+		return process.env.GIGACHAT_CREDENTIALS;
+	}
+	return value;
 }
 
 function createClient(
@@ -315,7 +325,10 @@ function consumeChunk(
 			block.name = delta.function_call.name;
 		}
 
-		const deltaArguments = asRecord(delta.function_call.arguments);
+		const deltaArguments = normalizeToolArguments(
+			asRecord(delta.function_call.arguments),
+			block.name,
+		);
 		if (deltaArguments) {
 			block.arguments = mergeArguments(block.arguments, deltaArguments);
 			block.partialArgs = JSON.stringify(block.arguments);
@@ -556,6 +569,72 @@ function mergeArguments(
 	delta: Record<string, unknown>,
 ): Record<string, unknown> {
 	return { ...current, ...delta };
+}
+
+function normalizeToolArguments(
+	value: Record<string, unknown> | undefined,
+	toolName: string,
+): Record<string, unknown> | undefined {
+	if (!value) {
+		return undefined;
+	}
+	return normalizeEscapedToolStrings(value, undefined, toolName) as Record<
+		string,
+		unknown
+	>;
+}
+
+function normalizeEscapedToolStrings(
+	value: unknown,
+	key: string | undefined,
+	toolName: string,
+): unknown {
+	if (typeof value === "string") {
+		let normalized = value.replace(/\\'/g, "'").replace(/\\"/g, '"');
+		if (shouldDecodeEscapedWhitespace(key, toolName)) {
+			normalized = normalized
+				.replace(/\\r\\n/g, "\n")
+				.replace(/\\n/g, "\n")
+				.replace(/\\r/g, "\r")
+				.replace(/\\t/g, "\t");
+		}
+		return normalized;
+	}
+
+	if (Array.isArray(value)) {
+		return value.map((item) =>
+			normalizeEscapedToolStrings(item, key, toolName),
+		);
+	}
+
+	if (value && typeof value === "object") {
+		const result: Record<string, unknown> = {};
+		for (const [nestedKey, nestedValue] of Object.entries(value)) {
+			result[nestedKey] = normalizeEscapedToolStrings(
+				nestedValue,
+				nestedKey,
+				toolName,
+			);
+		}
+		return result;
+	}
+
+	return value;
+}
+
+function shouldDecodeEscapedWhitespace(
+	key: string | undefined,
+	toolName: string,
+): boolean {
+	const normalizedKey = key?.replace(/[-_]/g, "").toLowerCase();
+	if (
+		["content", "contents", "text", "oldstring", "newstring"].includes(
+			normalizedKey ?? "",
+		)
+	) {
+		return true;
+	}
+	return ["write", "edit"].includes(toolName.toLowerCase());
 }
 
 function mapStopReason(reason: string): StopReason {
