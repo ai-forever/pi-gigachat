@@ -13,8 +13,8 @@ export interface GigaChatModelDefinition {
 	maxTokens: number;
 }
 
-export const GIGACHAT_DEFAULT_BASE_URL =
-	"https://gigachat.devices.sberbank.ru/api/v1";
+export const GIGACHAT_DEFAULT_BASE_URL = "https://api.giga.chat/v1";
+// "https://gigachat.devices.sberbank.ru/api/v1";  // https://api.giga.chat/
 
 export const GIGACHAT_MODELS: GigaChatModelDefinition[] = [
 	{
@@ -43,5 +43,14 @@ export const GIGACHAT_MODELS: GigaChatModelDefinition[] = [
 		cost: { input: 650, output: 650, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: 128000,
 		maxTokens: 8192,
+	},
+	{
+		id: "GigaChat-3-Ultra",
+		name: "GigaChat 3 Ultra",
+		reasoning: true,
+		input: ["text", "image"],
+		cost: { input: 1200, output: 1200, cacheRead: 0, cacheWrite: 0 },
+		contextWindow: 256000,
+		maxTokens: 32768,
 	},
 ];
