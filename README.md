@@ -107,6 +107,7 @@ Current metadata is aligned with the public GigaChat model docs as of March 23, 
 - Uses the official [`gigachat`](https://github.com/ai-forever/gigachat-js) SDK for auth and request configuration.
 - Uses a custom SSE parser instead of the SDK's built-in `client.stream(...)` path, because tool-call responses can arrive split across transport chunks and break the SDK parser.
 - Supports refreshable stored credentials for both basic and token-credentials login modes.
+- Optional Russian Trusted Root CA support: pass a PEM path via `GIGACHAT_CA_BUNDLE` or place it at `~/.local/share/gigachat-ca/bundle.pem`. Sber endpoints serve a Минцифры root CA that Node does not trust by default. Use the root certificate only — including the intermediate CA in the bundle breaks chain building in Node.
 ## Publish Checklist
 
 Before the first publish:

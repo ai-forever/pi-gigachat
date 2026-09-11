@@ -28,6 +28,7 @@ import { GIGACHAT_DEFAULT_BASE_URL } from "./models.js";
 import {
 	GIGACHAT_DEFAULT_SCOPE,
 	type GigaChatScope,
+	gigachatHttpsAgent,
 	isAccessToken,
 	normalizeScope,
 	PiGigaChatClient,
@@ -210,6 +211,7 @@ function createClient(
 			GIGACHAT_DEFAULT_BASE_URL,
 		profanityCheck: options?.profanityCheck,
 		dangerouslyAllowBrowser: isBrowserRuntime(),
+		httpsAgent: gigachatHttpsAgent(),
 	};
 
 	switch (auth.kind) {
