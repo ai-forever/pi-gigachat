@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import https from "node:https";
 import type { OAuthCredentials } from "@mariozechner/pi-ai";
 import GigaChat, { type GigaChatClientConfig } from "gigachat";
 import type {
@@ -309,6 +311,32 @@ export class PiGigaChatClient extends GigaChat {
 	}
 }
 
+/**
+ * Sber endpoints serve a Russian Trusted Root CA chain. Node does not trust it
+ * by default, so allow a custom CA bundle for the SDK's Axios transport.
+ * Resolution order: GIGACHAT_CA_BUNDLE (path to PEM), then
+ * ~/.local/share/gigachat-ca/bundle.pem. Returns undefined when no bundle is
+ * found, leaving default TLS behavior untouched.
+ */
+export function gigachatHttpsAgent(): https.Agent | undefined {
+	const candidates = [
+		process.env.GIGACHAT_CA_BUNDLE,
+		`${process.env.HOME ?? ""}/.local/share/gigachat-ca/bundle.pem`,
+	].filter((path): path is string => Boolean(path));
+
+	for (const path of candidates) {
+		try {
+			const ca = fs.readFileSync(path, "utf8");
+			if (ca.includes("BEGIN CERTIFICATE")) {
+				return new https.Agent({ ca });
+			}
+		} catch {
+			// try the next candidate
+		}
+	}
+	return undefined;
+}
+
 export function createTokenClient(
 	authorizationKey: string,
 	scope: GigaChatScope,
@@ -318,6 +346,7 @@ export function createTokenClient(
 		credentials: authorizationKey,
 		scope,
 		baseUrl,
+		httpsAgent: gigachatHttpsAgent(),
 	} satisfies GigaChatClientConfig;
 
 	return new PiGigaChatClient(config);
@@ -332,6 +361,7 @@ export function createPasswordClient(
 		user,
 		password,
 		baseUrl,
+		httpsAgent: gigachatHttpsAgent(),
 	} satisfies GigaChatClientConfig;
 
 	return new PiGigaChatClient(config);

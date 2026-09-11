@@ -349,7 +349,10 @@ export const gigachatOAuthProvider: Omit<OAuthProviderInterface, "id"> = {
 		}
 
 		return models.map((model) =>
-			model.provider === "gigachat" ? { ...model, baseUrl } : model,
+			model.provider === "gigachat" &&
+			model.baseUrl === GIGACHAT_DEFAULT_BASE_URL
+				? { ...model, baseUrl }
+				: model,
 		);
 	},
 };

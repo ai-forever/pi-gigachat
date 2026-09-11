@@ -5,7 +5,7 @@ GigaChat as a standalone `pi-coding-agent` extension package.
 ## What It Includes
 
 - native `gigachat` provider registration for `pi`
-- built-in `GigaChat-2` (Lite), `GigaChat-2-Pro`, and `GigaChat-2-Max`
+- built-in `GigaChat-2` (Lite), `GigaChat-2-Pro`, `GigaChat-2-Max`, and `GigaChat-3-Ultra`
 - `/login gigachat` onboarding with stored credential refresh
 - robust streaming for tool-heavy sessions without the SDK `client.stream(...)` parser path
 - source in `src/` and published build artifacts in `dist/`
@@ -93,7 +93,7 @@ export GIGACHAT_BASE_URL=https://gigachat.devices.sberbank.ru/api/v1
 - `gigachat/GigaChat-2`
 - `gigachat/GigaChat-2-Pro`
 - `gigachat/GigaChat-2-Max`
-
+- `gigachat/GigaChat-3-Ultra` (served at `https://api.giga.chat/v1`, available to individuals in the GigaChat freemium mode)
 Current metadata is aligned with the public GigaChat model docs as of March 23, 2026:
 
 - `GigaChat-2` is shown as `GigaChat 2 Lite`
@@ -107,7 +107,7 @@ Current metadata is aligned with the public GigaChat model docs as of March 23, 
 - Uses the official [`gigachat`](https://github.com/ai-forever/gigachat-js) SDK for auth and request configuration.
 - Uses a custom SSE parser instead of the SDK's built-in `client.stream(...)` path, because tool-call responses can arrive split across transport chunks and break the SDK parser.
 - Supports refreshable stored credentials for both basic and token-credentials login modes.
-
+- Optional Russian Trusted Root CA support: pass a PEM path via `GIGACHAT_CA_BUNDLE` or place it at `~/.local/share/gigachat-ca/bundle.pem`. Sber endpoints serve a Минцифры root CA that Node does not trust by default. Use the root certificate only — including the intermediate CA in the bundle breaks chain building in Node.
 ## Publish Checklist
 
 Before the first publish:

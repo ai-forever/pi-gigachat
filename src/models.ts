@@ -11,6 +11,7 @@ export interface GigaChatModelDefinition {
 	};
 	contextWindow: number;
 	maxTokens: number;
+	baseUrl?: string;
 }
 
 export const GIGACHAT_DEFAULT_BASE_URL =
@@ -43,5 +44,15 @@ export const GIGACHAT_MODELS: GigaChatModelDefinition[] = [
 		cost: { input: 650, output: 650, cacheRead: 0, cacheWrite: 0 },
 		contextWindow: 128000,
 		maxTokens: 8192,
+	},
+	{
+		id: "GigaChat-3-Ultra",
+		name: "GigaChat 3.5 Ultra",
+		reasoning: false,
+		input: ["text", "image"],
+		cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+		contextWindow: 128000,
+		maxTokens: 8192,
+		baseUrl: "https://api.giga.chat/v1",
 	},
 ];
